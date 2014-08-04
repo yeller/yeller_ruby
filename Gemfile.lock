@@ -35,4 +35,4 @@ DEPENDENCIES
   rspec
   sinatra
   thin
-  yajl-ruby
+  yajl-ruby (~> 1.2.0)
