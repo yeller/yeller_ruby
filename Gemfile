@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'yajl-ruby'
+gem 'yajl-ruby', '~> 1.2.0'
 
 group :development, :test do
   gem 'rspec'
