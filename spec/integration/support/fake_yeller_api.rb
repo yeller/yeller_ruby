@@ -1,41 +1,19 @@
 require 'sinatra'
 require 'thin'
+require 'webmock'
 
 class FakeYellerApi
+  extend WebMock::API
   HOST = "localhost"
   attr_reader :token
 
   def self.start(token, *ports, &block)
     apis  = ports.map { new(token) }
-    mutex = Mutex.new
-    ready = ConditionVariable.new
 
-    Thin::Logging.silent = true
-
-    t = Thread.new {
-      # Run Thin inside an EventMachine loop so starting it is non-blocking
-      EM.run {
-        mutex.synchronize {
-          ports.zip(apis).each do |port, api|
-            app = FakeYellerApi::App.new(api)
-            Thin::Server.start(app, HOST, port)
-          end
-          ready.signal
-        }
-      }
-    }
-
-    # Wait until the server is up and running, then execute the block
-    mutex.synchronize {
-      ready.wait(mutex)
-      begin
-        block.call(*apis)
-      rescue Exception => e
-        raise e
-      ensure
-        t.terminate
-      end
-    }
+    ports.zip(apis).each do |port, api|
+      app = FakeYellerApi::App.new(api)
+      stub_request(:any, /localhost:#{port}/).to_rack(app)
+    end
   end
 
   def initialize(token)

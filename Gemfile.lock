@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.6)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     daemons (1.1.9)
     diff-lcs (1.2.5)
     eventmachine (1.0.3)
@@ -16,6 +19,7 @@ GEM
     rspec-expectations (2.14.4)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.4)
+    safe_yaml (1.0.3)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -25,6 +29,9 @@ GEM
       eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     tilt (1.4.1)
+    webmock (1.18.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
     yajl-ruby (1.2.0)
 
 PLATFORMS
@@ -35,4 +42,5 @@ DEPENDENCIES
   rspec
   sinatra
   thin
+  webmock
   yajl-ruby (~> 1.2.0)

@@ -11,4 +11,5 @@ end
 group :test do
   gem 'sinatra'
   gem 'thin'
+  gem 'webmock'
 end
