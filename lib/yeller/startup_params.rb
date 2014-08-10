@@ -17,6 +17,7 @@ module Yeller
       options[:"application-environment"] ||
         ENV['RAILS_ENV'] ||
         ENV['RACK_ENV'] ||
+        ((defined?(::Rails) && Rails.respond_to?(:env)) ? Rails.env.to_s : nil) ||
         PRODUCTION
     end
   end
