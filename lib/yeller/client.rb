@@ -35,6 +35,10 @@ module Yeller
       next_server.client.request(post)
     end
 
+    def enabled?
+      true
+    end
+
     private
 
     def next_server

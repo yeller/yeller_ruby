@@ -11,6 +11,10 @@ module Yeller
       end
     end
 
+    def self.enabled?
+      Yeller::Rack.enabled?
+    end
+
     module ActionControllerCatchingHooks
       def self.included(base)
         base.send(:alias_method, :render_exception_without_yeller, :render_exception)

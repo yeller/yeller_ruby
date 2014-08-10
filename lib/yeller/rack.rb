@@ -11,6 +11,11 @@ module Yeller
       @client.report(exception, options)
     end
 
+    def self.enabled?
+      return false unless @client
+      @client.enabled?
+    end
+
     def initialize(app)
       @app = app
     end
