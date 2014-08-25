@@ -36,10 +36,14 @@ module Yeller
       filters = []
       if defined?(Gem)
         Gem.path.each do |gem_path|
-          filters << [gem_path, 'GEM_ROOT']
+          if 0 < gem_path.size
+            filters << [gem_path, 'GEM_ROOT']
+          end
         end
       end
-      filters << [project_root, 'PROJECT_ROOT']
+      if 0 < project_root.size
+        filters << [project_root, 'PROJECT_ROOT']
+      end
       filters
     end
 
