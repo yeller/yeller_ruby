@@ -32,7 +32,7 @@ module Yeller
       @servers << Yeller::Server.new(host, port)
     end
 
-    def backtrace_filters
+    def backtrace_filename_filters
       filters = []
       if defined?(Gem)
         Gem.path.each do |gem_path|
@@ -43,6 +43,14 @@ module Yeller
       end
       if 0 < project_root.size
         filters << [project_root, 'PROJECT_ROOT']
+      end
+      filters
+    end
+
+    def backtrace_method_filters
+      filters = []
+      if defined?(Rails)
+        filters << [/_run__\d+__.*callbacks/, 'process_callbacks']
       end
       filters
     end
