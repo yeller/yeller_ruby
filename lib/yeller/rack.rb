@@ -16,6 +16,10 @@ module Yeller
       @client.enabled?
     end
 
+    def self.client
+      @client
+    end
+
     def initialize(app)
       @app = app
     end
