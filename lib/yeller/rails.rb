@@ -7,6 +7,7 @@ module Yeller
     def self.configure(&block)
       Yeller::Rack.configure do |config|
         config.error_handler = Yeller::LogErrorHandler.new(::Rails.logger)
+        config.environment = ::Rails.env.to_s
         block.call(config)
       end
     end
