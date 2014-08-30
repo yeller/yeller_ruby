@@ -35,12 +35,30 @@ module Yeller
           exception,
           :url => request.url,
           :location => "#{controller.class.to_s}##{params[:action]}",
-          :custom_data => {
-            :params => params,
-            :session => env.fetch('rack.session', {})
-          })
+          :custom_data => _yeller_custom_data
+        )
 
         render_exception_without_yeller(env, exception)
+      end
+
+      def _yeller_custom_data
+        out = {
+          :params => params,
+          :session => env.fetch('rack.session', {})
+        }
+        out.merge!(yeller_user_data || {})
+        if respond_to?(:yeller_custom_data)
+          out.merge!(yeller_custom_data || {})
+        end
+        out
+      end
+
+      def yeller_user_data
+        return {} unless respond_to?(:current_user)
+        return {} unless current_user.respond_to?(:id)
+        id = current_user.id
+        return {} unless id.is_a?(Integer)
+        {"user" => {"id" => id}}
       end
     end
 

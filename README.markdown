@@ -182,3 +182,33 @@ end
 ```
 
 This also sets up the error logger for yeller as the Rails logger (see above for more about error loggers), and hooks into Rails via a railtie so that exceptions are caught correctly. Once you've done `Yeller::Rails.configure`, everything else should be automatic.
+
+## Sending Custom Data Via Rails
+
+Yeller tracks any data that might be helpful from a request as arbitrary JSON. To hook into that from Rails, you can define a `yeller_custom_data` method in your `ApplicationController`, that returns a hash of any data you want to send up to Yeller:
+
+```ruby
+class ApplicationController < ActionController::Base
+  def yeller_custom_data
+    if current_team
+      {:team => current_team.to_hash}
+    end
+  end
+end
+```
+
+`Yeller::Rails` already includes the `params` and `session` from the HTTP request in this payload.
+
+## Sending Affected Users
+
+Yeller supports tracking the users affected by a particular exception. If you already have a `#current_user` method defined on the controller an exception comes from, and it has an `#id` that is an integer, then `Yeller::Rails` will automatically include it. If not, feel free to override `#yeller_user_data` to return a user with the right id:
+
+```ruby
+class ApplicationController < ActionController::Base
+  def yeller_user_data
+    if logged_in_user
+      {"user" : {"id" => logged_in_user.id }}
+    end
+  end
+end
+```
