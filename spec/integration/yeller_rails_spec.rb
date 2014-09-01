@@ -8,6 +8,7 @@ describe Yeller::Rails do
   class CustomException < StandardError; end
   class FakeController < ActionController::Base
     def index
+      puts "LOOOL"
       raise CustomException.new
     end
   end

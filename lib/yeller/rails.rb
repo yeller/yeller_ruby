@@ -20,27 +20,7 @@ module Yeller
       Yeller::Rack.client
     end
 
-    module ActionControllerCatchingHooks
-      def self.included(base)
-        base.send(:alias_method, :render_exception_without_yeller, :render_exception)
-        base.send(:alias_method, :render_exception, :render_exception_with_yeller)
-      end
-
-      protected
-      def render_exception_with_yeller(env, exception)
-        controller = env['action_controller.instance']
-        params = controller.send(:params)
-        request = ::Rack::Request.new(env)
-        Yeller::Rack.report(
-          exception,
-          :url => request.url,
-          :location => "#{controller.class.to_s}##{params[:action]}",
-          :custom_data => _yeller_custom_data
-        )
-
-        render_exception_without_yeller(env, exception)
-      end
-
+    module ControllerMethods
       def _yeller_custom_data
         out = {
           :params => params,
@@ -62,9 +42,35 @@ module Yeller
       end
     end
 
+    module ActionControllerCatchingHooks
+      def self.included(base)
+        base.send(:alias_method, :render_exception_without_yeller, :render_exception)
+        base.send(:alias_method, :render_exception, :render_exception_with_yeller)
+      end
+
+      protected
+      def render_exception_with_yeller(env, exception)
+        controller = env['action_controller.instance']
+        params = controller.send(:params)
+        request = ::Rack::Request.new(env)
+        Yeller::Rack.report(
+          exception,
+          :url => request.url,
+          :location => "#{controller.class.to_s}##{params[:action]}",
+          :custom_data => controller._yeller_custom_data
+        )
+
+        render_exception_without_yeller(env, exception)
+      end
+    end
+
     class Railtie < ::Rails::Railtie
       initializer "yeller.use_rack_middleware" do |app|
         app.config.middleware.insert 0, "Yeller::Rack"
+
+        ActiveSupport.on_load :action_controller do
+          include Yeller::Rails::ControllerMethods
+        end
       end
 
       config.after_initialize do
