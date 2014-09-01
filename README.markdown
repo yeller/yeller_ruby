@@ -5,8 +5,9 @@ exception tracker](http://yellerapp.com).
 
 When an uncaught exception occurs, you can use this library to log the
 exception to Yeller's servers, letting you easily diagnose exceptions in your
-running app. There's built in support for Rack and Rails, as well as just plain
-ruby apps.
+running app.
+
+There's built in support for Rack and Rails, as well as just plain ruby apps.
 
 # Integration
 
