@@ -117,7 +117,7 @@ end
 
 # Robustness
 
-This client does some basic roundtripping/timeouts, so it can handle problems
+This client does smart roundtripping/timeouts, so it can handle problems
 with individual yeller servers. After trying all the servers twice, it will
 stop reporting the current exception, then try each one again for the next one.
 
