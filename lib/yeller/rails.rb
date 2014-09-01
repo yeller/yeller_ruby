@@ -67,10 +67,6 @@ module Yeller
     class Railtie < ::Rails::Railtie
       initializer "yeller.use_rack_middleware" do |app|
         app.config.middleware.insert 0, "Yeller::Rack"
-
-        ActiveSupport.on_load :action_controller do
-          include Yeller::Rails::ControllerMethods
-        end
       end
 
       config.after_initialize do
@@ -79,6 +75,7 @@ module Yeller
         elsif defined(::ActionDispatch::ShowExceptions)
           ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
         end
+        ActionController::Base.include(Yeller::Rails::ControllerMethods)
       end
     end
   end
