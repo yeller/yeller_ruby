@@ -11,9 +11,10 @@ class FakeYellerApi
     apis  = ports.map { new(token) }
 
     ports.zip(apis).each do |port, api|
-      app = FakeYellerApi::App.new(api)
+      app = FakeYellerApi::App.new!(api)
       stub_request(:any, /localhost:#{port}/).to_rack(app)
     end
+    block.call(*apis)
   end
 
   def initialize(token)
@@ -47,12 +48,14 @@ class FakeYellerApi
         exception = JSON.load(request.body.read)
         @api.receive!(exception)
       end
+      'success'
     end
 
     post '/:api_token/deploys/?' do
       if params[:api_token] == @api.token
         @api.receive_deploy!(params)
       end
+      'success'
     end
   end
 end
