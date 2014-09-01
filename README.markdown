@@ -23,7 +23,7 @@ Otherwise you can install it:
 gem install yeller_ruby
 ```
 
-## Integrating
+## Ruby
 
 Once you've got the gem installed, you'll need to setup a Yeller client. This means you'll need the api key from your Yeller project (which you can find on your project's setting screen). Once you have the api key, you can create a client like this:
 
@@ -148,10 +148,6 @@ end
 ```ruby
 config.error_handler = Yeller::LogErrorHandler.new(your_logger)
 ```
-
-## Integrations
-
-`yeller_ruby` ships with two integrations out of the box: Rack and Rails:
 
 ## Rack
 
