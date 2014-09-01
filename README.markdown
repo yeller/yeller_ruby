@@ -1,4 +1,5 @@
 ![](https://travis-ci.org/tcrayford/yeller_ruby.svg?branch=v0.1.0)
+
 This is the ruby notifier library for integration your app with the Yeller exception notifier.
 
 When an uncaught exception occurs, you can use this library to log the
