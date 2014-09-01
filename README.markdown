@@ -1,10 +1,12 @@
 ![](https://travis-ci.org/tcrayford/yeller_ruby.svg?branch=v0.1.0)
 
-This is the ruby notifier library for integration your app with the [Yeller exception notifier](http://yellerapp.com).
+This is the ruby notifier library for integrating your app with the [Yeller
+exception tracker](http://yellerapp.com).
 
 When an uncaught exception occurs, you can use this library to log the
 exception to Yeller's servers, letting you easily diagnose exceptions in your
-running app.
+running app. There's built in support for Rack and Rails, as well as just plain
+ruby apps.
 
 # Integration
 
