@@ -9,11 +9,6 @@ running app.
 
 There's built in support for Rack and Rails, as well as just plain ruby apps.
 
-# Integration
-
-Note that `yeller_ruby` is a low-level client, and doesn't include
-integrations with web frameworks, background job systems, etc.
-
 ## Adding to your project
 
 `yeller_ruby` is distributed via rubygems. If you use bundler, add it to your Gemfile:
