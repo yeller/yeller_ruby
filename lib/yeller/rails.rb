@@ -75,7 +75,7 @@ module Yeller
         elsif defined(::ActionDispatch::ShowExceptions)
           ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
         end
-        ActionController::Base.include(Yeller::Rails::ControllerMethods)
+        ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
       end
     end
   end
