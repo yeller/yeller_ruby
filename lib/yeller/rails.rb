@@ -1,4 +1,3 @@
-require 'rails'
 require 'yeller'
 require 'yeller/rack'
 
