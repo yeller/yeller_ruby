@@ -5,8 +5,12 @@ module Yeller
   class Rails
     def self.configure(&block)
       Yeller::Rack.configure do |config|
-        config.error_handler = Yeller::LogErrorHandler.new(::Rails.logger)
-        config.environment = ::Rails.env.to_s
+        if defined?(::Rails)
+          config.error_handler = Yeller::LogErrorHandler.new(::Rails.logger)
+          config.environment = ::Rails.env.to_s
+        elsif ENV['RAILS_ENV']
+          config.environment = ENV['RAILS_ENV']
+        end
         block.call(config)
       end
     end

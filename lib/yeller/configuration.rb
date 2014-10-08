@@ -1,4 +1,4 @@
-require_relative 'server'
+require File.expand_path('../server', __FILE__)
 
 module Yeller
   class Configuration

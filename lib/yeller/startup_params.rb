@@ -1,4 +1,4 @@
-require_relative 'version'
+require File.expand_path('../version', __FILE__)
 
 module Yeller
   class StartupParams

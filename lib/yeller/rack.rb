@@ -1,5 +1,5 @@
 require 'rack/request'
-require_relative '../yeller'
+require File.expand_path('../../yeller', __FILE__)
 
 module Yeller
   class Rack

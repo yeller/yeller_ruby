@@ -1,24 +1,16 @@
 require 'net/http'
 require 'yajl/json_gem'
 
-require_relative 'yeller/backtrace_filter'
-require_relative 'yeller/client'
-require_relative 'yeller/ignoring_client'
-require_relative 'yeller/configuration'
-require_relative 'yeller/exception_formatter'
-require_relative 'yeller/server'
-require_relative 'yeller/version'
-require_relative 'yeller/startup_params'
-require_relative 'yeller/log_error_handler'
-require_relative 'yeller/verify_log'
-
-if defined?(::Rails)
-  require 'yeller/rails'
-end
-
-if defined?(::Rails) && defined?(::Rake)
-  require 'yeller/rails/tasks'
-end
+require File.expand_path('../yeller/backtrace_filter', __FILE__)
+require File.expand_path('../yeller/client', __FILE__)
+require File.expand_path('../yeller/ignoring_client', __FILE__)
+require File.expand_path('../yeller/configuration', __FILE__)
+require File.expand_path('../yeller/exception_formatter', __FILE__)
+require File.expand_path('../yeller/server', __FILE__)
+require File.expand_path('../yeller/version', __FILE__)
+require File.expand_path('../yeller/startup_params', __FILE__)
+require File.expand_path('../yeller/log_error_handler', __FILE__)
+require File.expand_path('../yeller/verify_log', __FILE__)
 
 module Yeller
   def self.client(*blocks, &block)

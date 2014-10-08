@@ -1,3 +1,4 @@
+require 'rails'
 require_relative '../../lib/yeller'
 require_relative '../../lib/yeller/rails'
 require_relative 'support/fake_yeller_api'
