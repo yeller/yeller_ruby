@@ -20,6 +20,7 @@ module Yeller
     end
 
     def filter_method(method)
+      return '' if method.nil?
       method_filters.each do |filter|
         method.gsub!(filter[0], filter[1])
       end

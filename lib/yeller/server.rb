@@ -15,7 +15,9 @@ module Yeller
       http = Net::HTTP.new(host, port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-      http.ciphers = "DEFAULT:!aNULL:!eNULL:!LOW:!EXPORT:!SSLv2"
+      if http.respond_to?(:ciphers=)
+        http.ciphers = "DEFAULT:!aNULL:!eNULL:!LOW:!EXPORT:!SSLv2"
+      end
       http
     end
   end

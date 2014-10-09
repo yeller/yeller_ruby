@@ -1,9 +1,10 @@
 require 'rails'
+require 'action_controller'
+require 'action_controller/metal'
+require 'action_controller/base'
 require_relative '../../lib/yeller'
 require_relative '../../lib/yeller/rails'
 require_relative 'support/fake_yeller_api'
-require 'action_controller'
-require 'action_controller/metal'
 
 describe Yeller::Rails do
   class CustomException < StandardError; end

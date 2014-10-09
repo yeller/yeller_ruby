@@ -1,5 +1,5 @@
-require 'yeller'
-require 'yeller/rack'
+require File.expand_path('../../yeller', __FILE__)
+require File.expand_path('../../yeller/rack', __FILE__)
 
 module Yeller
   class Rails
@@ -27,7 +27,7 @@ module Yeller
       def _yeller_custom_data
         out = {
           :params => params,
-          :session => env.fetch('rack.session', {})
+          :session => request.env.fetch('rack.session', {})
         }
         out.merge!(yeller_user_data || {})
         if respond_to?(:yeller_custom_data)
@@ -45,13 +45,12 @@ module Yeller
       end
     end
 
-    module ActionControllerCatchingHooks
+    module Rails3AndFourCatchingHooks
       def self.included(base)
         base.send(:alias_method, :render_exception_without_yeller, :render_exception)
         base.send(:alias_method, :render_exception, :render_exception_with_yeller)
       end
 
-      protected
       def render_exception_with_yeller(env, exception)
         Yeller::VerifyLog.render_exception_with_yeller!
         begin
@@ -76,27 +75,67 @@ module Yeller
         rescue => e
           Yeller::VerifyLog.error_reporting_rails_error!(e)
         end
-
-        render_exception_without_yeller(env, exception)
       end
     end
 
-    class Railtie < ::Rails::Railtie
-      initializer "yeller.use_rack_middleware" do |app|
-        app.config.middleware.insert 0, "Yeller::Rack"
+    module Rails2CatchingHooks
+      def self.included(base)
+        if base.respond_to?(:rescue_action_in_public)
+          base.send(:alias_method, :rescue_action_in_public_without_yeller, :rescue_action_in_public)
+          base.send(:alias_method, :rescue_action_in_public, :rescue_public_exception_with_yeller)
+        end
+
+        if base.respond_to?(:rescue_action_locally)
+          base.send(:alias_method, :rescue_action_locally_without_yeller, :rescue_action_locally)
+          base.send(:alias_method, :rescue_action_locally, :rescue_local_exception_with_yeller)
+        end
       end
 
-      config.after_initialize do
-        if defined?(::ActionDispatch::DebugExceptions)
-          Yeller::VerifyLog.monkey_patching_rails!("ActionDispatch::DebugExceptions")
-          ::ActionDispatch::DebugExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
-        end
-        if defined?(::ActionDispatch::ShowExceptions)
-          Yeller::VerifyLog.monkey_patching_rails!("ActionDispatch::ShowExceptions")
-          ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
-        end
-        ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
+      protected
+      def rescue_public_exception_with_yeller(exception)
+        _send_to_yeller(exception)
+        rescue_action_in_public_without_yeller(exception)
       end
+
+      def rescue_local_exception_with_yeller(exception)
+        _send_to_yeller(exception)
+        rescue_action_locally_without_yeller(exception)
+      end
+
+      def _send_to_yeller(exception)
+        controller = self
+        params = controller.send(:params)
+        Yeller::Rack.report(
+          exception,
+          :url => request.url,
+          :location => "#{controller.class.to_s}##{params[:action]}",
+          :custom_data => controller._yeller_custom_data
+        )
+      end
+    end
+
+    def self.monkeypatch_rails3!
+      if defined?(::ActionDispatch::DebugExceptions)
+        ::ActionDispatch::DebugExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
+      elsif defined?(::ActionDispatch::ShowExceptions)
+        ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
+      end
+      ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
+    end
+
+    if defined?(::Rails) && defined?(::Rails::Railtie)
+      class Railtie < ::Rails::Railtie
+        initializer "yeller.use_rack_middleware" do |app|
+          app.config.middleware.insert 0, "Yeller::Rack"
+        end
+
+        config.after_initialize do
+          Yeller::Rails.monkeypatch_rails3!
+       end
+      end
+    elsif defined?(ActionController::Base)
+      ActionController::Base.send(:include, Yeller::Rails::Rails2CatchingHooks)
+      ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
     end
   end
 end

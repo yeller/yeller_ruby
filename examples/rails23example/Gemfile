@@ -1,0 +1,7 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem "rails", '2.3.18'
+gem "yeller_ruby", :path => '/Users/tcrayford/proj/yeller/yeller_ruby/'
+
+gem 'sqlite3'

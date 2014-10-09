@@ -41,9 +41,9 @@ module Yeller
 
     def to_hash
       result = {
-        message: message,
-        stacktrace: formatted_backtrace,
-        type: type,
+        :message => message,
+        :stacktrace => formatted_backtrace,
+        :type => type,
         :"custom-data" => options.fetch(:custom_data, {})
       }
       result[:url] = options[:url] if options.key?(:url)
