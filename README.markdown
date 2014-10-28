@@ -179,6 +179,14 @@ end
 
 This also sets up the error logger for yeller as the Rails logger (see above for more about error loggers), and hooks into Rails via a railtie so that exceptions are caught correctly. Once you've done `Yeller::Rails.configure`, everything else should be automatic.
 
+Once you've initialized the gem, you can check if everything works using the rake task (this is for rails apps only):
+
+```bash
+bundle exec rake yeller:verify
+```
+
+That will tell you if your setup is sending errors to rails.
+
 ## Sending Custom Data Via Rails
 
 Yeller tracks any data that might be helpful from a request as arbitrary JSON. To hook into that from Rails, you can define a `yeller_custom_data` method in your `ApplicationController`, that returns a hash of any data you want to send up to Yeller:
