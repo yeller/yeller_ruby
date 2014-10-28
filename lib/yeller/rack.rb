@@ -4,7 +4,9 @@ require_relative '../yeller'
 module Yeller
   class Rack
     def self.configure(&block)
-      @client = Yeller.client(&block)
+      @config_blocks ||= []
+      @config_blocks << block
+      @client = Yeller.client(*@config_blocks)
     end
 
     def self.report(exception, options={})
