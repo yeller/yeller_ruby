@@ -33,7 +33,7 @@ module Yeller
 
   def self.build_client(config)
     if config.ignore_exceptions?
-      Yeller::IgnoringClient.new
+      Yeller::IgnoringClient.new(config.token)
     else
       Yeller::Client.new(
         config.servers,

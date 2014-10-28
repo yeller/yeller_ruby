@@ -7,7 +7,15 @@ namespace :yeller do
     catcher = Yeller::Rails::ActionControllerCatchingHooks
 
     if !([ActionController::Base, ActionDispatch::DebugExceptions, ActionDispatch::ShowExceptions, ApplicationController].any? {|x| x.included_modules.include?(catcher) })
-      puts "NO INITIALIZATION"
+      puts "YELLER: NO RAILS INITIALIZATION DETECTED"
+      puts "this is likely our problem, email tcrayford@yellerapp.com"
+      exit 126
+    end
+
+    client = Yeller::Rack.instance_variable_get('@client')
+    if client.token.nil? || client.token == 'YOUR_API_TOKEN_HERE'
+      puts "NO YELLER API TOKEN DETECTED"
+      puts "Yeller needs an api key configured. Check the README: https://github.com/tcrayford/yeller_ruby to find out how to do that"
       exit 126
     end
 
@@ -38,7 +46,6 @@ namespace :yeller do
 
     class YellerVerificationController < ApplicationController; end
 
-    puts "TOKEN: #{Yeller::Rack.instance_variable_get('@client').inspect}"
 
     Rails.application.routes.draw do
       root 'yeller_verification#verify'
@@ -46,5 +53,18 @@ namespace :yeller do
 
     env = Rack::MockRequest.env_for('http://example.com')
     Rails.application.call(env)
+
+    client = Yeller::Rack.instance_variable_get('@client')
+    if client.reported_error?
+      Kernel.puts "SUCCESS yeller-verified token=\"#{client.token}\""
+    else
+      if client.enabled?
+        Kernel.puts "ERROR: CLIENT NOT ENABLED yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
+        Kernel.puts "Yeller rails client not enabled, check development_environments setting"
+      else
+        Kernel.puts "ERROR yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
+      end
+      exit 126
+    end
   end
 end

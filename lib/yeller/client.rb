@@ -1,6 +1,6 @@
 module Yeller
   class Client
-    attr_reader :backtrace_filter
+    attr_reader :backtrace_filter, :token
 
     def initialize(servers, token, startup_params, backtrace_filter, error_handler)
       @servers = servers
@@ -9,6 +9,7 @@ module Yeller
       @token = token
       @error_handler = error_handler
       @backtrace_filter = backtrace_filter
+      @reported_error = false
     end
 
     def report(exception, options={})
@@ -19,6 +20,7 @@ module Yeller
 
     def report_with_roundtrip(serialized, error_count)
       next_server.client.post("/#{@token}", serialized, {"Content-Type" => "application/json"})
+      @reported_error ||= true
     rescue StandardError => e
       if error_count <= (@servers.size * 2)
         report_with_roundtrip(serialized, error_count + 1)
@@ -37,6 +39,10 @@ module Yeller
 
     def enabled?
       true
+    end
+
+    def reported_error?
+      @reported_error
     end
 
     def inspect
