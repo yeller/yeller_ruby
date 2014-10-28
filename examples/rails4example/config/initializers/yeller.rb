@@ -1,7 +1,7 @@
 require 'yeller/rails'
 
 Yeller::Rails.configure do |config|
-  config.token = 'YOUR API TOKEN HERE'
+  config.token = 'YOUR_API_TOKEN_HERE'
 end
 
 if Yeller::Rails.enabled?
