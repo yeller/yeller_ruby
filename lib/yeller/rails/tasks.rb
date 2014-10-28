@@ -14,7 +14,7 @@ namespace :yeller do
 
     client = Yeller::Rack.instance_variable_get('@client')
     if client.token.nil? || client.token == 'YOUR_API_TOKEN_HERE'
-      puts "NO YELLER API TOKEN DETECTED"
+      puts "NO YELLER API TOKEN DETECTED: your api token was set to #{client.token.inspect}"
       puts "Yeller needs an api key configured. Check the README: https://github.com/tcrayford/yeller_ruby to find out how to do that"
       exit 126
     end
