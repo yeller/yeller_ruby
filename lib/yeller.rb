@@ -11,16 +11,15 @@ require_relative 'yeller/version'
 require_relative 'yeller/startup_params'
 require_relative 'yeller/log_error_handler'
 
-puts "RAILS"
-if defined?(::Rails) && defined?(::Rake)
-  require 'yeller/rails'
-  require 'yeller/rails/tasks'
-end
-
 module Yeller
-  def self.client(&block)
+  def self.client(*blocks, &block)
     config = Yeller::Configuration.new
-    block.call(config)
+    if block_given?
+      block.call(config)
+    end
+    blocks.each do |b|
+      b.call(config)
+    end
     build_client(config)
   end
 
