@@ -39,6 +39,10 @@ module Yeller
       true
     end
 
+    def inspect
+      "#<Yeller::Client enabled=true token=#{@token.inspect}>"
+    end
+
     private
 
     def next_server
