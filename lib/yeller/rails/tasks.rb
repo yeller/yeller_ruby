@@ -48,10 +48,10 @@ namespace :yeller do
 
 
     Rails.application.routes.draw do
-      root 'yeller_verification#verify'
+      get '/yeller_verify' => 'yeller_verification#verify'
     end
 
-    env = Rack::MockRequest.env_for('http://example.com')
+    env = Rack::MockRequest.env_for('http://example.com/yeller_verify')
     Rails.application.call(env)
 
     client = Yeller::Rack.instance_variable_get('@client')
