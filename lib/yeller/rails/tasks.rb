@@ -56,7 +56,7 @@ namespace :yeller do
 
     client = Yeller::Rack.instance_variable_get('@client')
     if client.reported_error?
-      Kernel.puts "SUCCESS yeller-verified token=\"#{client.token}\""
+      Kernel.puts "SUCCESS: yeller-verified token=\"#{client.token}\""
     else
       if !client.enabled?
         Kernel.puts "ERROR: CLIENT NOT ENABLED yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
