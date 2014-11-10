@@ -58,7 +58,7 @@ namespace :yeller do
     if client.reported_error?
       Kernel.puts "SUCCESS yeller-verified token=\"#{client.token}\""
     else
-      if client.enabled?
+      if !client.enabled?
         Kernel.puts "ERROR: CLIENT NOT ENABLED yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
         Kernel.puts "Yeller rails client not enabled, check development_environments setting"
       else
