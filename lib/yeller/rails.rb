@@ -114,8 +114,7 @@ module Yeller
     def self.monkeypatch_rails3!
       if defined?(::ActionDispatch::DebugExceptions)
         ::ActionDispatch::DebugExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
-      end
-      if defined?(::ActionDispatch::ShowExceptions)
+      elsif defined?(::ActionDispatch::ShowExceptions)
         ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
       end
 
