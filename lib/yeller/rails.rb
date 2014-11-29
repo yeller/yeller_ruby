@@ -72,6 +72,7 @@ module Yeller
         rescue => e
           Yeller::VerifyLog.error_reporting_rails_error!(e)
         end
+        render_exception_without_yeller(env, exception)
       end
     end
 
@@ -118,7 +119,7 @@ module Yeller
         ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
       end
 
-      if defined?(::AcitonController)
+      if defined?(::ActionController)
         ::ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
       end
     end
