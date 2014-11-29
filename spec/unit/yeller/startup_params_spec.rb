@@ -1,4 +1,4 @@
-require_relative '../../../lib/yeller/startup_params'
+require File.expand_path('../../../../lib/yeller/startup_params', __FILE__)
 
 describe Yeller::StartupParams do
   before do

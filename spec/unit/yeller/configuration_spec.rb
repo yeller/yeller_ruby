@@ -1,4 +1,4 @@
-require_relative '../../../lib/yeller/configuration'
+require File.expand_path('../../../../lib/yeller/configuration', __FILE__)
 
 describe Yeller::Configuration do
   describe "servers" do

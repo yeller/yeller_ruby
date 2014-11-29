@@ -1,4 +1,4 @@
-require_relative '../../../lib/yeller/exception_formatter'
+require File.expand_path('../../../../lib/yeller/exception_formatter', __FILE__)
 
 
 describe Yeller::ExceptionFormatter do

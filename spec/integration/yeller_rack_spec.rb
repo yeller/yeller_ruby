@@ -1,6 +1,6 @@
-require_relative '../../lib/yeller'
-require_relative '../../lib/yeller/rack'
-require_relative 'support/fake_yeller_api'
+require File.expand_path('../../../lib/yeller', __FILE__)
+require File.expand_path('../../../lib/yeller/rack', __FILE__)
+require File.expand_path('../support/fake_yeller_api', __FILE__)
 
 describe Yeller::Rack do
   class CustomException < StandardError; end

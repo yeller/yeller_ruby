@@ -1,4 +1,4 @@
-require_relative '../../../lib/yeller/backtrace_filter'
+require File.expand_path('../../../../lib/yeller/backtrace_filter', __FILE__)
 
 describe Yeller::BacktraceFilter do
   it "filters out the defined filters (sample is project root)" do

@@ -1,4 +1,4 @@
-require_relative '../../../lib/yeller/rails'
+require File.expand_path('../../../../lib/yeller/rails', __FILE__)
 
 describe Yeller::Rails::ControllerMethods do
   class FakeUnitController
