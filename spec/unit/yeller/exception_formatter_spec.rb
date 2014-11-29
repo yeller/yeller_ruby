@@ -40,7 +40,7 @@ describe Yeller::ExceptionFormatter do
         "app/models/user.rb:13:in `magic'",
         "app/controllers/users_controller.rb:8:in `index'"
       ]
-      error = double(:error, backtrace: backtrace, message: 'an_message')
+      error = double(:error, :backtrace => backtrace, :message => 'an_message')
       hash = Yeller::ExceptionFormatter.format(error)
       hash[:stacktrace].should == [
         ["app/models/user.rb", "13", "magic"],
@@ -60,7 +60,7 @@ describe Yeller::ExceptionFormatter do
     hash = Yeller::ExceptionFormatter.format(
       error,
       identity_backtrace_filter,
-      custom_data:  {params: {user_id: 1}})
+      :custom_data => {:params => {:user_id => 1}})
     hash[:"custom-data"].should == {:params => {:user_id => 1}}
   end
 
@@ -70,7 +70,7 @@ describe Yeller::ExceptionFormatter do
       hash = Yeller::ExceptionFormatter.format(
         error,
         identity_backtrace_filter,
-        url: "http://example.com/foobar")
+        :url => "http://example.com/foobar")
       hash[:url].should == "http://example.com/foobar"
     end
 
@@ -87,7 +87,7 @@ describe Yeller::ExceptionFormatter do
       hash = Yeller::ExceptionFormatter.format(
         error,
         identity_backtrace_filter,
-        location: "ExampleController#show")
+        :location => "ExampleController#show")
       hash[:location].should == "ExampleController#show"
     end
 
