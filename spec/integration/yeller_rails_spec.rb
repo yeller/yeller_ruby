@@ -1,4 +1,6 @@
+require 'rails' rescue nil
 rails_version = defined?(Rails.version) && Rails.version || defined?(Rails::VERSION::STRING) && Rails::VERSION::STRING
+puts "RAILS_VERSION: #{rails_version.inspect}"
 if rails_version && rails_version.to_f < 3
   require File.expand_path('../../../lib/yeller/verify_log', __FILE__)
   Yeller::VerifyLog.enable!
