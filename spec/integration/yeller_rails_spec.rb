@@ -67,8 +67,6 @@ else
           client.add_insecure_server "localhost", 8888
         end
 
-        catcher = Yeller::Rails::Rails2CatchingHooks
-        in_base = ActionController::Base.included_modules.include?(catcher)
         request = ActionController::TestRequest.new("REQUEST_URI" => "/yeller_fake_controller")
         response = ActionController::TestResponse.new
         FakeController.new.process(request, response)
