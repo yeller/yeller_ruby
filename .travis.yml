@@ -10,7 +10,6 @@ rvm:
 
 gemfile:
   - gemfiles/rails23Gemfile
-  - Gemfile
   - gemfiles/rails30Gemfile
   - gemfiles/rails31Gemfile
   - gemfiles/rails32Gemfile
