@@ -59,7 +59,7 @@ else
     end
 
     class Yeller::FakeRailsApp < Rails::Application
-      config.secret_key_base = 'lol'
+      config.secret_key_base = 'lollollollollollollollollollollol'
       config.eager_load = true
     end
 
