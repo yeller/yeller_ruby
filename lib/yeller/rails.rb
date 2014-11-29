@@ -80,15 +80,13 @@ module Yeller
 
     module Rails2CatchingHooks
       def self.included(base)
-        if base.respond_to?(:rescue_action_in_public)
-          base.send(:alias_method, :rescue_action_in_public_without_yeller, :rescue_action_in_public)
-          base.send(:alias_method, :rescue_action_in_public, :rescue_public_exception_with_yeller)
-        end
+        Yeller::VerifyLog.monkey_patching_rails!("ActionController::Base.rescue_action_in_public")
+        base.send(:alias_method, :rescue_action_in_public_without_yeller, :rescue_action_in_public)
+        base.send(:alias_method, :rescue_action_in_public, :rescue_public_exception_with_yeller)
 
-        if base.respond_to?(:rescue_action_locally)
-          base.send(:alias_method, :rescue_action_locally_without_yeller, :rescue_action_locally)
-          base.send(:alias_method, :rescue_action_locally, :rescue_local_exception_with_yeller)
-        end
+        Yeller::VerifyLog.monkey_patching_rails!("ActionController::Base.rescue_action_locally")
+        base.send(:alias_method, :rescue_action_locally_without_yeller, :rescue_action_locally)
+        base.send(:alias_method, :rescue_action_locally, :rescue_local_exception_with_yeller)
       end
 
       protected
@@ -103,6 +101,7 @@ module Yeller
       end
 
       def _send_to_yeller(exception)
+        Yeller::VerifyLog.render_exception_with_yeller!
         controller = self
         params = controller.send(:params)
         Yeller::Rack.report(
@@ -117,10 +116,14 @@ module Yeller
     def self.monkeypatch_rails3!
       if defined?(::ActionDispatch::DebugExceptions)
         ::ActionDispatch::DebugExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
-      elsif defined?(::ActionDispatch::ShowExceptions)
+      end
+      if defined?(::ActionDispatch::ShowExceptions)
         ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::Rails3AndFourCatchingHooks)
       end
-      ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
+
+      if defined?(::AcitonController)
+        ::ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)
+      end
     end
 
     if defined?(::Rails) && defined?(::Rails::Railtie)
