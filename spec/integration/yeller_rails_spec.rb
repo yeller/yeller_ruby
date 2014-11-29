@@ -1,4 +1,8 @@
-require 'rails' rescue nil
+begin
+  require 'rails'
+rescue LoadError
+  nil
+end
 rails_version = defined?(Rails.version) && Rails.version || defined?(Rails::VERSION::STRING) && Rails::VERSION::STRING
 puts "RAILS_VERSION: #{rails_version.inspect}"
 if rails_version && rails_version.to_f < 3
