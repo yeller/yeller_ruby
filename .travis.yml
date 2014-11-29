@@ -1,1 +1,28 @@
-script: "bundle exec rspec spec"
+cache: bundler
+language: ruby
+rvm:
+  - 2.1.2
+  - 2.1.1
+  - 2.0.0
+  - 1.9.3
+  - 1.9.2
+  - 1.8.7
+
+gemfile:
+  - gemfiles/rails23Gemfile
+  - Gemfile
+matrix:
+  fast_finish: true
+  exclude:
+    - rvm: 1.8.7
+      gemfile: Gemfile
+    - rvm: 1.9.2
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 1.9.3
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.0.0
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.1.1
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.1.2
+      gemfile: gemfiles/rails23Gemfile
