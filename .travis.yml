@@ -33,3 +33,9 @@ matrix:
       gemfile: gemfiles/rails23Gemfile
     - rvm: 2.1.2
       gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.1.3
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.1.4
+      gemfile: gemfiles/rails23Gemfile
+    - rvm: 2.1.5
+      gemfile: gemfiles/rails23Gemfile
