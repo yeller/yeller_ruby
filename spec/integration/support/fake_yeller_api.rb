@@ -19,18 +19,22 @@ class FakeYellerApi
 
   def initialize(token)
     @token = token
+    @received = []
   end
 
   def receive!(params)
-    @received_params = params
+    @received << params
   end
 
   def receive_deploy!(params)
     @deploy_params = params
   end
 
-  def has_received_exception?(e)
-    @received_params && e.class.name == @received_params.fetch('type')
+  def has_received_exception_once?(e)
+    req = @received.first
+    req &&
+      e.class.name == req.fetch('type') &&
+      @received.count == 1
   end
 
   def has_received_deploy?(revision)

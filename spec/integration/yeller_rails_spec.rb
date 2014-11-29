@@ -30,10 +30,10 @@ if rails_version && rails_version.to_f < 3
         request = ActionController::TestRequest.new("REQUEST_URI" => "/yeller_fake_controller")
         response = ActionController::TestResponse.new
         FakeController.new.process(request, response)
-        unless yeller_api.has_received_exception?(CustomException.new)
+        unless yeller_api.has_received_exception_once?(CustomException.new)
           Yeller::StdoutVerifyLog.print_log!
         end
-        yeller_api.should have_received_exception(CustomException.new)
+        yeller_api.should have_received_exception_once(CustomException.new)
       end
     end
   end
@@ -75,10 +75,10 @@ else
         end
         env = Rack::MockRequest.env_for("http://example.com")
         Rails.application.call(env)
-        unless yeller_api.has_received_exception?(CustomException.new)
+        unless yeller_api.has_received_exception_once?(CustomException.new)
           Yeller::StdoutVerifyLog.print_log!
         end
-        yeller_api.should have_received_exception(CustomException.new)
+        yeller_api.should have_received_exception_once(CustomException.new)
       end
     end
   end

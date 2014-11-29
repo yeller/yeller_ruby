@@ -18,7 +18,7 @@ describe Yeller::Rack do
       expect do
         app.call(env)
       end.to raise_error(CustomException)
-      yeller_api.should have_received_exception(CustomException.new)
+      yeller_api.should have_received_exception_once(CustomException.new)
     end
   end
 end

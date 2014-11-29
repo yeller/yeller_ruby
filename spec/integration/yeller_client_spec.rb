@@ -21,7 +21,7 @@ describe "Yeller API client" do
       end
       exception = raise_exception(CustomException, "an_message")
       yeller.report(exception)
-      yeller_api.should have_received_exception(exception)
+      yeller_api.should have_received_exception_once(exception)
     end
   end
 
@@ -39,8 +39,8 @@ describe "Yeller API client" do
         yeller.report(exception)
       end
 
-      fake_main.should have_received_exception(exception)
-      fake_secondary.should have_received_exception(exception)
+      fake_main.should have_received_exception_once(exception)
+      fake_secondary.should have_received_exception_once(exception)
     end
   end
 
@@ -53,7 +53,7 @@ describe "Yeller API client" do
       end
       exception = raise_exception(CustomException, "an_message")
       yeller.report(exception)
-      yeller_api.should_not have_received_exception(exception)
+      yeller_api.should_not have_received_exception_once(exception)
     end
   end
 
@@ -79,7 +79,7 @@ describe "Yeller API client" do
       end
       exception = raise_exception(CustomException, "an_message")
       yeller.report(exception)
-      yeller_api.should_not have_received_exception(exception)
+      yeller_api.should_not have_received_exception_once(exception)
     end
   end
 end
