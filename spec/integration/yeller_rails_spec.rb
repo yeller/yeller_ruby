@@ -71,9 +71,9 @@ else
         end
         Yeller::FakeRailsApp.initialize!
         Rails.application.routes.draw do
-          root 'fake#index'
+          get '/fake_yeller_verify' => 'fake#index'
         end
-        env = Rack::MockRequest.env_for("http://example.com")
+        env = Rack::MockRequest.env_for("http://example.com/fake_yeller_verify")
         Rails.application.call(env)
         unless yeller_api.has_received_exception_once?(CustomException.new)
           Yeller::StdoutVerifyLog.print_log!
