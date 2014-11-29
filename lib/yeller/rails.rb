@@ -67,10 +67,7 @@ module Yeller
             )
           else
             Yeller::VerifyLog.action_controller_instance_not_in_env!
-            Yeller::Rack.report(
-              exception,
-              :url => request.url
-            )
+            Yeller::Rack.rescue_rack_exception(exception, env)
           end
         rescue => e
           Yeller::VerifyLog.error_reporting_rails_error!(e)
