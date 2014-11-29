@@ -5,7 +5,7 @@ require 'webmock'
 class FakeYellerApi
   extend WebMock::API
   HOST = "localhost"
-  attr_reader :token
+  attr_reader :token, :received
 
   def self.start(token, *ports, &block)
     apis  = ports.map { new(token) }
@@ -60,6 +60,23 @@ class FakeYellerApi
         @api.receive_deploy!(params)
       end
       'success'
+    end
+  end
+end
+
+RSpec::Matchers.define :have_received_exception_once do |expected|
+  match do |actual|
+    actual.has_received_exception_once?(expected)
+  end
+
+  failure_message_for_should do |actual|
+    req = actual.received.first
+    if actual.received.empty?
+      "expected to have received an exception, but received 0 exceptions"
+    elsif expected.class.name != req.fetch('type')
+      "expected to have received an exception of type #{expected.class.name}, but got #{req.fetch('type')}"
+    elsif actual.received.count != 1
+      "expected to receive one error, but received more than one error: #{actual.received.map {|x| x.fetch('type')}}"
     end
   end
 end
