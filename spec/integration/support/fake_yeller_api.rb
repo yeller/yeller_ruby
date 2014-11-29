@@ -74,7 +74,7 @@ RSpec::Matchers.define :have_received_exception_once do |expected|
     if actual.received.empty?
       "expected to have received an exception, but received 0 exceptions"
     elsif expected.class.name != req.fetch('type')
-      "expected to have received an exception of type #{expected.class.name}, but got #{req.fetch('type')}"
+      "expected to have received an exception of type #{expected.class.name}, but got #{req}"
     elsif actual.received.count != 1
       "expected to receive one error, but received more than one error: #{actual.received.map {|x| x.fetch('type')}}"
     end
