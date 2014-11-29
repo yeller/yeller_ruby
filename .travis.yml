@@ -11,6 +11,11 @@ rvm:
 gemfile:
   - gemfiles/rails23Gemfile
   - Gemfile
+  - gemfiles/rails30Gemfile
+  - gemfiles/rails31Gemfile
+  - gemfiles/rails32Gemfile
+  - gemfiles/rails40Gemfile
+  - gemfiles/rails41Gemfile
 matrix:
   fast_finish: true
   exclude:

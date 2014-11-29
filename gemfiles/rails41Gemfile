@@ -1,0 +1,16 @@
+source "https://rubygems.org"
+
+gem 'yajl-ruby', '~> 1.2.0'
+
+group :development, :test do
+  gem 'rspec'
+  gem 'sinatra', '~>1.2.7'
+  gem 'rake'
+end
+
+group :test do
+  gem 'sinatra', '~>1.2.7'
+  gem 'thin'
+  gem 'rails', '~>4.1'
+  gem 'webmock'
+end
