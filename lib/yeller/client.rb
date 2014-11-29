@@ -19,12 +19,18 @@ module Yeller
     end
 
     def report_with_roundtrip(serialized, error_count)
-      next_server.client.post("/#{@token}", serialized, {"Content-Type" => "application/json"})
-      @reported_error ||= true
+      response = next_server.client.post("/#{@token}", serialized, {"Content-Type" => "application/json"})
+      if response.code.to_i >= 200 && response.code.to_i <= 300
+        Yeller::VerifyLog.reported_to_api!
+        @reported_error ||= true
+      else
+        Yeller::VerifyLog.error_code_from_api!(response)
+      end
     rescue StandardError => e
       if error_count <= (@servers.size * 2)
         report_with_roundtrip(serialized, error_count + 1)
       else
+        Yeller::VerifyLog.exception_from_api!(e)
         @error_handler.handle(e)
       end
     end

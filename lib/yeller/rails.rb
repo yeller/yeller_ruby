@@ -50,15 +50,29 @@ module Yeller
 
       protected
       def render_exception_with_yeller(env, exception)
-        controller = env['action_controller.instance']
-        params = controller.send(:params)
-        request = ::Rack::Request.new(env)
-        Yeller::Rack.report(
-          exception,
-          :url => request.url,
-          :location => "#{controller.class.to_s}##{params[:action]}",
-          :custom_data => controller._yeller_custom_data
-        )
+        Yeller::VerifyLog.render_exception_with_yeller!
+        begin
+          request = ::Rack::Request.new(env)
+          controller = env['action_controller.instance']
+
+          if controller
+            params = controller.send(:params)
+            Yeller::Rack.report(
+              exception,
+              :url => request.url,
+              :location => "#{controller.class.to_s}##{params[:action]}",
+              :custom_data => controller._yeller_custom_data
+            )
+          else
+            Yeller::VerifyLog.action_controller_instance_not_in_env!
+            Yeller::Rack.report(
+              exception,
+              :url => request.url
+            )
+          end
+        rescue => e
+          Yeller::VerifyLog.error_reporting_rails_error!(e)
+        end
 
         render_exception_without_yeller(env, exception)
       end
@@ -71,8 +85,11 @@ module Yeller
 
       config.after_initialize do
         if defined?(::ActionDispatch::DebugExceptions)
+          Yeller::VerifyLog.monkey_patching_rails!("ActionDispatch::DebugExceptions")
           ::ActionDispatch::DebugExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
-        elsif defined(::ActionDispatch::ShowExceptions)
+        end
+        if defined?(::ActionDispatch::ShowExceptions)
+          Yeller::VerifyLog.monkey_patching_rails!("ActionDispatch::ShowExceptions")
           ::ActionDispatch::ShowExceptions.send(:include, Yeller::Rails::ActionControllerCatchingHooks)
         end
         ActionController::Base.send(:include, Yeller::Rails::ControllerMethods)

@@ -1,7 +1,11 @@
 require 'action_controller/test_case'
 namespace :yeller do
+  task :enable_verify_log => [] do
+    Yeller::VerifyLog.enable!
+  end
+
   desc "verify your yeller gem installation by sending a test exception to yeller's servers"
-  task :verify => [:environment] do
+  task :verify => [:enable_verify_log, :environment] do
     Dir["app/controllers/application*.rb"].each { |file| require(File.expand_path(file)) }
 
     catcher = Yeller::Rails::ActionControllerCatchingHooks
@@ -29,6 +33,7 @@ namespace :yeller do
       prepend_before_filter :verify_yeller
 
       def verify_yeller
+        Yeller::VerifyLog.about_to_raise_exception_in_controller!
         raise YellerVerifyException.new("verifying that yeller works")
       end
 
@@ -62,6 +67,7 @@ namespace :yeller do
         Kernel.puts "ERROR: CLIENT NOT ENABLED yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
         Kernel.puts "Yeller rails client not enabled, check development_environments setting"
       else
+        Yeller::StdoutVerifyLog.print_log!
         Kernel.puts "ERROR yeller-verification-failed enabled=#{client.enabled?} token=\"#{client.token}\""
       end
       exit 126

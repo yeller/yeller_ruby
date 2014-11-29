@@ -10,6 +10,7 @@ require_relative 'yeller/server'
 require_relative 'yeller/version'
 require_relative 'yeller/startup_params'
 require_relative 'yeller/log_error_handler'
+require_relative 'yeller/verify_log'
 
 if defined?(::Rails)
   require 'yeller/rails'

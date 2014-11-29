@@ -10,6 +10,7 @@ module Yeller
     end
 
     def self.report(exception, options={})
+      Yeller::VerifyLog.reporting_to_yeller_rack!
       @client.report(exception, options)
     end
 
