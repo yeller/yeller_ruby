@@ -9,8 +9,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'sinatra'
-  gem 'thin'
   gem 'rails'
   gem 'webmock'
 end
