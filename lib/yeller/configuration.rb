@@ -102,11 +102,18 @@ module Yeller
     end
 
     def skip_exceptions
-      Yeller::SkipExceptions.new(@skip_exceptions || [])
+      Yeller::SkipExceptions.new(
+        @skip_exceptions || [],
+        @skip_exceptions_callback || Proc.new {|e| false}
+      )
     end
 
     def skip_exceptions=(skip_exceptions)
       @skip_exceptions = skip_exceptions
+    end
+
+    def skip_exceptions_callback(skip_exceptions_callback)
+      @skip_exceptions_callback = skip_exceptions_callback
     end
   end
 end
