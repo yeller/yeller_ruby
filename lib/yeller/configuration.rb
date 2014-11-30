@@ -100,5 +100,13 @@ module Yeller
     def project_root=(new_project_root)
       @project_root = new_project_root
     end
+
+    def skip_exceptions
+      Yeller::SkipExceptions.new(@skip_exceptions || [])
+    end
+
+    def skip_exceptions=(skip_exceptions)
+      @skip_exceptions = skip_exceptions
+    end
   end
 end

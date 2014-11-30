@@ -82,4 +82,20 @@ describe "Yeller API client" do
       yeller_api.should_not have_received_exception_once(exception)
     end
   end
+
+  it "ignores exceptions it was told to skip" do
+    FakeYellerApi.start('token', 8893) do |yeller_api|
+      yeller = Yeller.client do |client|
+        client.token = 'token'
+        client.remove_default_servers
+        client.add_insecure_server "localhost", 8893
+        client.skip_exceptions = [
+          'CustomException'
+        ]
+      end
+      exception = raise_exception(CustomException, "an_message")
+      yeller.report(exception)
+      yeller_api.should_not have_received_exception_once(exception)
+    end
+  end
 end

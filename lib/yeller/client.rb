@@ -2,20 +2,23 @@ module Yeller
   class Client
     attr_reader :backtrace_filter, :token
 
-    def initialize(servers, token, startup_params, backtrace_filter, error_handler)
+    def initialize(servers, token, startup_params, backtrace_filter, error_handler, skip_exceptions)
       @servers = servers
       @last_server = rand(servers.size)
       @startup_params = startup_params
       @token = token
-      @error_handler = error_handler
       @backtrace_filter = backtrace_filter
+      @error_handler = error_handler
+      @skip_exceptions = skip_exceptions
       @reported_error = false
     end
 
     def report(exception, options={})
-      hash = ExceptionFormatter.format(exception, backtrace_filter, options)
-      serialized = JSON.dump(@startup_params.merge(hash))
-      report_with_roundtrip(serialized, 0)
+      unless @skip_exceptions.skip?(exception)
+        hash = ExceptionFormatter.format(exception, backtrace_filter, options)
+        serialized = JSON.dump(@startup_params.merge(hash))
+        report_with_roundtrip(serialized, 0)
+      end
     end
 
     def report_with_roundtrip(serialized, error_count)

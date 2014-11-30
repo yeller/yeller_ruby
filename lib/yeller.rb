@@ -7,6 +7,7 @@ require File.expand_path('../yeller/ignoring_client', __FILE__)
 require File.expand_path('../yeller/configuration', __FILE__)
 require File.expand_path('../yeller/exception_formatter', __FILE__)
 require File.expand_path('../yeller/server', __FILE__)
+require File.expand_path('../yeller/skip_exceptions', __FILE__)
 require File.expand_path('../yeller/version', __FILE__)
 require File.expand_path('../yeller/startup_params', __FILE__)
 require File.expand_path('../yeller/log_error_handler', __FILE__)
@@ -33,7 +34,8 @@ module Yeller
         config.token,
         Yeller::StartupParams.defaults(config.startup_params),
         Yeller::BacktraceFilter.new(config.backtrace_filename_filters, config.backtrace_method_filters),
-        config.error_handler
+        config.error_handler,
+        config.skip_exceptions
       )
     end
   end
