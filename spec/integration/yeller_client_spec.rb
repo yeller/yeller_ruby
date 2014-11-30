@@ -89,7 +89,7 @@ describe "Yeller API client" do
         client.token = 'token'
         client.remove_default_servers
         client.add_insecure_server "localhost", 8893
-        client.skip_exceptions = [
+        client.add_skip_exceptions = [
           'CustomException'
         ]
       end

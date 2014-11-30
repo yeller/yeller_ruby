@@ -11,11 +11,23 @@ module Yeller
       Yeller::SecureServer.new("collector5.yellerapp.com", 443),
     ]
 
+    DEFAULT_SKIPPED_EXCEPTIONS = [
+      'AbstractController::ActionNotFound',
+      'ActionController::InvalidAuthenticityToken',
+      'ActionController::RoutingError',
+      'ActionController::UnknownAction',
+      'ActiveRecord::RecordNotFound',
+      'CGI::Session::CookieStore::TamperedWithCookie',
+      'Mongoid::Errors::DocumentNotFound',
+      'Sinatra::NotFound'
+    ]
+
     def initialize
       @servers = DEFAULT_SERVERS
       @startup_params = {}
       @error_handler = Yeller::LogErrorHandler.new
       @development_environments = Set.new(['development', 'test'])
+      @skip_exceptions = DEFAULT_SKIPPED_EXCEPTIONS
     end
 
     def remove_default_servers
@@ -110,6 +122,11 @@ module Yeller
 
     def skip_exceptions=(skip_exceptions)
       @skip_exceptions = skip_exceptions
+    end
+
+    def add_skip_exceptions(skip_exceptions)
+      @skip_exceptions ||= []
+      @skip_exceptions = @skip_exceptions + skip_exceptions
     end
 
     def skip_exceptions_callback(skip_exceptions_callback)
