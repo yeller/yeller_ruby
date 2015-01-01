@@ -1,3 +1,4 @@
+require 'set'
 require File.expand_path('../server', __FILE__)
 
 module Yeller
@@ -45,7 +46,7 @@ module Yeller
     end
 
     def backtrace_filename_filters
-      filters = []
+      filters = Set.new([])
       if defined?(Gem)
         Gem.path.each do |gem_path|
           if 0 < gem_path.size
