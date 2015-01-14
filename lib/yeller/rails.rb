@@ -1,5 +1,6 @@
 require File.expand_path('../../yeller', __FILE__)
 require File.expand_path('../../yeller/rack', __FILE__)
+require File.expand_path('../../yeller/rails/tasks', __FILE__)
 
 module Yeller
   class Rails
