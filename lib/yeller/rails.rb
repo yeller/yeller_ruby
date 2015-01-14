@@ -1,6 +1,8 @@
 require File.expand_path('../../yeller', __FILE__)
 require File.expand_path('../../yeller/rack', __FILE__)
-require File.expand_path('../../yeller/rails/tasks', __FILE__)
+if defined?(::Rake)
+  require File.expand_path('../../yeller/rails/tasks', __FILE__)
+end
 
 module Yeller
   class Rails
