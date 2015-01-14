@@ -29,6 +29,12 @@ matrix:
     - rvm: 1.9.2
       gemfile: gemfiles/rails41Gemfile
     - rvm: 1.8.7
+      gemfile: gemfiles/rails30Gemfile
+    - rvm: 1.8.7
+      gemfile: gemfiles/rails31Gemfile
+    - rvm: 1.8.7
+      gemfile: gemfiles/rails32Gemfile
+    - rvm: 1.8.7
       gemfile: gemfiles/rails40Gemfile
     - rvm: 1.8.7
       gemfile: gemfiles/rails41Gemfile
