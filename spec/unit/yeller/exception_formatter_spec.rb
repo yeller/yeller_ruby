@@ -46,7 +46,11 @@ describe Yeller::ExceptionFormatter do
       error = e
     end
     hash = Yeller::ExceptionFormatter.format(error)
-    hash.fetch(:type).should == 'Foo::CustomException'
+    if error.respond_to?(:cause)
+      hash.fetch(:type).should == 'Foo::CustomException'
+    else
+      hash.fetch(:type).should == 'RuntimeError'
+    end
   end
 
   describe "backtraces" do
