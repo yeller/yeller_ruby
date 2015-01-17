@@ -38,7 +38,11 @@ class FakeYellerApi
 
   def has_received_exception_for_user?(user_id)
     req = @received.first
-    req.fetch("custom-data").fetch("user").fetch("id").should == user_id
+    req.
+      fetch("custom-data").
+      fetch("user").
+      fetch("id").
+      should == user_id
   end
 
   def has_received_deploy?(revision)

@@ -66,6 +66,16 @@ else
   require File.expand_path('../../../lib/yeller/rails', __FILE__)
   require File.expand_path('../support/fake_yeller_api', __FILE__)
 
+  class FakeIntegrationUser
+    def id
+      1
+    end
+
+    def attributes
+      {:email => "tom@example.com"}
+    end
+  end
+
   describe Yeller::Rails do
     class CustomException < StandardError; end
     class FakeController < ActionController::Base
@@ -75,7 +85,7 @@ else
       end
 
       def current_user
-        OpenStruct.new(:id => 1, :atttributes => {:email => "tom@example.com"})
+        FakeIntegrationUser.new
       end
     end
 
