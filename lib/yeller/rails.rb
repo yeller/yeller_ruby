@@ -50,7 +50,7 @@ module Yeller
         user = {}
         if current_user.respond_to?(:attributes) && current_user.attributes.is_a?(Hash)
           current_user.attributes.each do |k, v|
-            unless YELLER_IGNORED_USER_ATTRIBUTES.any? {|a| k.to_s.include?(a) }
+           unless YELLER_IGNORED_USER_ATTRIBUTES.any? {|a| k.to_s.include?(a) }
               user[k.to_s] = String(v)
             end
           end
