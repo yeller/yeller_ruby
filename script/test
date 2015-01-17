@@ -19,7 +19,7 @@ else # we have no args
     filename='spec'
 fi
 
-command='rspec --drb -c -f p'
+command='rspec -c -f p'
 
 if [ $need_rails ]; then
     command="ruby -S bundle exec $command"
