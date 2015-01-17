@@ -11,6 +11,10 @@ module Yeller
       @error_handler = error_handler
       @skip_exceptions = skip_exceptions
       @reported_error = false
+      @headers = {
+        "Content-Type" => "application/json",
+        "User-Agent" => @startup_params.fetch(:"client-version")
+      }
     end
 
     def report(exception, options={})
@@ -22,7 +26,7 @@ module Yeller
     end
 
     def report_with_roundtrip(serialized, error_count)
-      response = next_server.client.post("/#{@token}", serialized, {"Content-Type" => "application/json"})
+      response = next_server.client.post("/#{@token}", serialized, @headers)
       if response.code.to_i >= 200 && response.code.to_i <= 300
         Yeller::VerifyLog.reported_to_api!
         @reported_error ||= true
