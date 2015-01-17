@@ -22,6 +22,10 @@ if rails_version && rails_version.to_f > 3
       def index
         raise CustomException.new
       end
+
+      def current_user
+        OpenStruct.new(:id => 1, :atttributes => {:email => "tom@example.com"})
+      end
     end
 
     class Yeller::FakeRailsApp < Rails::Application
