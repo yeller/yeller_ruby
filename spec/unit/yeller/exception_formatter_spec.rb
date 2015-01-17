@@ -34,6 +34,21 @@ describe Yeller::ExceptionFormatter do
     hash.fetch(:message).should be_nil
   end
 
+  it "unwraps nested exceptions" do
+    error = nil
+    begin
+      begin
+        raise Foo::CustomException.new("custom")
+      rescue => e
+        raise RuntimeError.new(e)
+      end
+    rescue => e
+      error = e
+    end
+    hash = Yeller::ExceptionFormatter.format(error)
+    hash.fetch(:type).should == 'Foo::CustomException'
+  end
+
   describe "backtraces" do
     it "formats backtraces" do
       backtrace = [

@@ -14,12 +14,21 @@ module Yeller
 
     attr_reader :type, :options, :backtrace_filter
 
-    def initialize(exception, backtrace_filter, options)
+    def initialize(e, backtrace_filter, options)
+      exception = unwrap_nested_exception(e)
       @type = exception.class.name
       @message = exception.message
       @backtrace = exception.backtrace
       @options = options
       @backtrace_filter = backtrace_filter
+    end
+
+    def unwrap_nested_exception(e)
+      if e.respond_to?(:cause) && e.cause
+        e.cause
+      else
+        e
+      end
     end
 
     def message
