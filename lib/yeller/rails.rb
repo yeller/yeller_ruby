@@ -30,7 +30,8 @@ module Yeller
       def _yeller_custom_data
         out = {
           :params => params,
-          :session => request.env.fetch('rack.session', {})
+          :session => request.env.fetch('rack.session', {}),
+          :"http-request" => Yeller::Rack.yeller_http_request_data(request),
         }
         out.merge!(yeller_user_data || {})
         if respond_to?(:yeller_custom_data)

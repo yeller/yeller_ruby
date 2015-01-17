@@ -44,7 +44,21 @@ module Yeller
         :custom_data => {
           :params => request.params,
           :session => env.fetch('rack.session', {}),
+          :"http-request" => Yeller::Rack.yeller_http_request_data(request),
       })
+    end
+
+    def self.yeller_http_request_data(request)
+      out = {
+        :"request-method" => request.request_method,
+      }
+      if request.user_agent
+        out[:"user-agent"] = request.user_agent
+      end
+      if request.referer
+        out[:referrer] = request.referer
+      end
+      out
     end
   end
 end
