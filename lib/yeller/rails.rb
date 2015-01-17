@@ -40,12 +40,33 @@ module Yeller
         out
       end
 
+      YELLER_IGNORED_USER_ATTRIBUTES = [
+        'password',
+        'card',
+        'secret',
+      ]
+
+      def _yeller_extract_user_attributes(current_user)
+        user = {}
+        if current_user.respond_to?(:attributes) && current_user.attributes.is_a?(Hash)
+          current_user.attributes.each do |k, v|
+            unless YELLER_IGNORED_USER_ATTRIBUTES.any? {|a| k.to_s.include?(a) }
+              user[k.to_s] = String(v)
+            end
+          end
+        else
+          {}
+        end
+      end
+
       def yeller_user_data
         return {} unless respond_to?(:current_user)
         return {} unless current_user.respond_to?(:id)
         id = current_user.id
         return {} unless id.is_a?(Integer)
-        {"user" => {"id" => id}}
+        user = {"id" => id}
+        user.merge!(_yeller_extract_user_attributes(user))
+        {"user" => user}
       end
     end
 
