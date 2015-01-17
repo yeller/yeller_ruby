@@ -52,6 +52,7 @@ if rails_version && rails_version.to_f > 3
           Yeller::StdoutVerifyLog.print_log!
         end
         yeller_api.should have_received_exception_once(CustomException.new)
+        yeller_api.should have_received_exception_for_user(1)
       end
     end
   end
@@ -72,6 +73,10 @@ else
         Yeller::VerifyLog.about_to_raise_exception_in_controller!
         raise CustomException.new
       end
+
+      def current_user
+        OpenStruct.new(:id => 1, :atttributes => {:email => "tom@example.com"})
+      end
     end
 
     it "submits an error" do
@@ -90,6 +95,7 @@ else
           Yeller::StdoutVerifyLog.print_log!
         end
         yeller_api.should have_received_exception_once(CustomException.new)
+        yeller_api.should have_received_exception_for_user(1)
       end
     end
   end
