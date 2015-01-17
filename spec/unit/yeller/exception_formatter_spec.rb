@@ -19,13 +19,13 @@ describe Yeller::ExceptionFormatter do
   it "returns the right type" do
     error = RuntimeError.new
     hash = Yeller::ExceptionFormatter.format(error)
-    hash[:type].should == 'RuntimeError'
+    hash.fetch(:type).should == 'RuntimeError'
   end
 
   it "returns scoped exception types" do
     error = Foo::CustomException.new
     hash = Yeller::ExceptionFormatter.format(error)
-    hash[:type].should == 'Foo::CustomException'
+    hash.fetch(:type).should == 'Foo::CustomException'
   end
 
   it "sets message to an empty string if none was given" do

@@ -2,7 +2,6 @@ module Yeller
   class ExceptionFormatter
     BACKTRACE_FORMAT = %r{^((?:[a-zA-Z]:)?[^:]+):(\d+)(?::in `([^']+)')?$}.freeze
 
-
     class IdentityBacktraceFilter
       def filter(trace)
         trace
@@ -20,7 +19,6 @@ module Yeller
       @message = exception.message
       @backtrace = exception.backtrace
       @options = options
-
       @backtrace_filter = backtrace_filter
     end
 
