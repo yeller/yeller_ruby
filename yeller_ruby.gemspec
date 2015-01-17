@@ -1,8 +1,8 @@
 # coding: utf-8
-require File.expand_path('./yeller/version')
+require File.expand_path('./lib/yeller/version')
 Gem::Specification.new do |spec|
   spec.name          = "yeller_ruby"
-  spec.version       = Yeller::Version
+  spec.version       = Yeller::VERSION
   spec.authors       = ["Tom Crayford"]
   spec.email         = ["tcrayford@googlemail.com"]
   spec.summary       = %q{A Ruby/Rack/Rails client for yellerapp.com}
