@@ -22,6 +22,10 @@ module Yeller
       Yeller::Rack.enabled?
     end
 
+    def self.report(exception, options={})
+      Yeller::Rack.report(exception, options)
+    end
+
     def self.client
       Yeller::Rack.client
     end
