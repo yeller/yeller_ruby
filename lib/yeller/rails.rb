@@ -80,7 +80,7 @@ module Yeller
         base.send(:alias_method, :render_exception, :render_exception_with_yeller)
       end
 
-      def _capture_exception(env, exception)
+      def _capture_exception(env, exception, extra={})
         begin
           request = ::Rack::Request.new(env)
           controller = env['action_controller.instance']
@@ -91,7 +91,7 @@ module Yeller
               exception,
               :url => request.url,
               :location => "#{controller.class.to_s}##{params[:action]}",
-              :custom_data => controller._yeller_custom_data
+              :custom_data => controller._yeller_custom_data.merge(extra),
             )
           else
             Yeller::VerifyLog.action_controller_instance_not_in_env!
@@ -102,8 +102,8 @@ module Yeller
         end
       end
 
-      def report_exception_to_yeller(exception)
-        _capture_exception(request.env, exception)
+      def report_exception_to_yeller(exception, extra={})
+        _capture_exception(request.env, exception, extra)
       end
 
       def render_exception_with_yeller(env, exception)
