@@ -80,8 +80,7 @@ module Yeller
         base.send(:alias_method, :render_exception, :render_exception_with_yeller)
       end
 
-      def render_exception_with_yeller(env, exception)
-        Yeller::VerifyLog.render_exception_with_yeller!
+      def _capture_exception(env, exception)
         begin
           request = ::Rack::Request.new(env)
           controller = env['action_controller.instance']
@@ -101,6 +100,15 @@ module Yeller
         rescue => e
           Yeller::VerifyLog.error_reporting_rails_error!(e)
         end
+      end
+
+      def report_exception_to_yeller(exception)
+        _capture_exception(request.env, exception)
+      end
+
+      def render_exception_with_yeller(env, exception)
+        Yeller::VerifyLog.render_exception_with_yeller!
+        _capture_exception(env, exception)
         render_exception_without_yeller(env, exception)
       end
     end
