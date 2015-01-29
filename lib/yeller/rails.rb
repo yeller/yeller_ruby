@@ -91,7 +91,7 @@ module Yeller
               exception,
               :url => request.url,
               :location => "#{controller.class.to_s}##{params[:action]}",
-              :custom_data => controller._yeller_custom_data.merge(extra),
+              :custom_data => controller._yeller_custom_data.merge(extra)
             )
           else
             Yeller::VerifyLog.action_controller_instance_not_in_env!
