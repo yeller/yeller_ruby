@@ -12,6 +12,7 @@ require File.expand_path('../yeller/version', __FILE__)
 require File.expand_path('../yeller/startup_params', __FILE__)
 require File.expand_path('../yeller/log_error_handler', __FILE__)
 require File.expand_path('../yeller/verify_log', __FILE__)
+require File.expand_path('../yeller/rails/tasks', __FILE__)
 
 module Yeller
   def self.client(*blocks, &block)
