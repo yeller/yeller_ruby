@@ -14,7 +14,7 @@ module Yeller
 
     def filter_filename(filename)
       filename_filters.each do |filter|
-        filename.gsub!(filter[0], filter[1])
+        filename.sub!(filter[0], filter[1])
       end
       filename
     end

@@ -18,6 +18,23 @@ describe Yeller::BacktraceFilter do
     ]
   end
 
+  it "only filters out the first occurrence of the filter" do
+    project_root = "/app"
+    filter = Yeller::BacktraceFilter.new(
+      [[project_root, 'PROJECT_ROOT']],
+      [])
+    filtered= filter.filter(
+      [
+        ["/app/app/controllers/foo_controller.rb",
+          "10",
+          "index"]
+    ]
+    )
+    filtered.should == [
+      ["PROJECT_ROOT/app/controllers/foo_controller.rb", "10", "index"]
+    ]
+  end
+
   it "filters method names" do
     filter = Yeller::BacktraceFilter.new(
       [],
