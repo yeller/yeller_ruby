@@ -5,8 +5,9 @@ describe Yeller::BacktraceFilter do
     project_root = "/var/www/my_rails_app"
     filter = Yeller::BacktraceFilter.new(
       [[project_root, '[PROJECT_ROOT]']],
-      [])
-    filtered= filter.filter(
+      [],
+      '/app')
+    filtered = filter.filter(
       [
         ["/var/www/my_rails_app/app/controllers/foo_controller.rb",
           "10",
@@ -22,8 +23,9 @@ describe Yeller::BacktraceFilter do
     project_root = "/app"
     filter = Yeller::BacktraceFilter.new(
       [[project_root, 'PROJECT_ROOT']],
-      [])
-    filtered= filter.filter(
+      [],
+      '/my_rails_app')
+    filtered = filter.filter(
       [
         ["/app/app/controllers/foo_controller.rb",
           "10",
@@ -38,8 +40,9 @@ describe Yeller::BacktraceFilter do
   it "filters method names" do
     filter = Yeller::BacktraceFilter.new(
       [],
-      [["foo", "bar"]])
-    filtered= filter.filter(
+      [["foo", "bar"]],
+      '/app')
+    filtered = filter.filter(
       [
         ["foo.rb",
           "10",
@@ -48,6 +51,23 @@ describe Yeller::BacktraceFilter do
     )
     filtered.should == [
       ["foo.rb", "10", "bar"]
+    ]
+  end
+
+  it "marks lines starting with the project root as in-app" do
+    filter = Yeller::BacktraceFilter.new(
+      [],
+      [],
+      '/app')
+    filtered = filter.filter(
+      [
+        ["/app/foo.rb",
+          "10",
+          "foo"]
+    ]
+    )
+    filtered.should == [
+      ["/app/foo.rb", "10", "foo", {"in-app" => true}]
     ]
   end
 end
