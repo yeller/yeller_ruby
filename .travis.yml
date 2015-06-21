@@ -1,4 +1,6 @@
 cache: bundler
+notifications:
+    slack: yeller:nHkgeCJkcwwjMF0DfOrmDccR
 language: ruby
 rvm:
   - 2.1.1
