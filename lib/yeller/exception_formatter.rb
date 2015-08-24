@@ -9,26 +9,35 @@ module Yeller
     end
 
     def self.format(exception, backtrace_filter=IdentityBacktraceFilter.new, options={})
-      new(exception, backtrace_filter, options).to_hash
+      all_causes = process_causes(exception)
+      root = all_causes.fetch(0, exception)
+      causes = all_causes.drop(1)
+      new(root, causes || [], backtrace_filter, options).to_hash
+    end
+
+    def self.process_causes(exception)
+      unwrap_causes(exception, [])
+    end
+
+    def self.unwrap_causes(exception, causes)
+      causes << exception
+      if exception.respond_to?(:cause) && exception.cause
+        unwrap_causes(exception.cause, causes)
+      else
+        causes.reverse
+      end
     end
 
     attr_reader :type, :options, :backtrace_filter
 
-    def initialize(e, backtrace_filter, options)
-      exception = unwrap_nested_exception(e)
+    def initialize(e, causes, backtrace_filter, options)
+      exception = e
       @type = exception.class.name
       @message = exception.message
       @backtrace = exception.backtrace
-      @options = options
+      @causes = causes
       @backtrace_filter = backtrace_filter
-    end
-
-    def unwrap_nested_exception(e)
-      if e.respond_to?(:cause) && e.cause
-        e.cause
-      else
-        e
-      end
+      @options = options
     end
 
     def message
@@ -36,22 +45,33 @@ module Yeller
       @message == type ? nil : @message
     end
 
-    def formatted_backtrace
-      return [] unless @backtrace
+    def formatted_backtrace(backtrace)
+      return [] unless backtrace
 
-      original_trace = @backtrace.map do |line|
+      original_trace = backtrace.map do |line|
         _, file, number, method = line.match(BACKTRACE_FORMAT).to_a
         [file, number, method]
       end
       backtrace_filter.filter(original_trace)
     end
 
+    def causes
+      @causes.map do |cause|
+        {
+          :type => cause.class.name,
+          :message => cause.message,
+          :stacktrace => formatted_backtrace(cause.backtrace),
+        }
+      end
+    end
+
     def to_hash
       result = {
         :message => message,
-        :stacktrace => formatted_backtrace,
+        :stacktrace => formatted_backtrace(@backtrace),
         :type => type,
-        :"custom-data" => options.fetch(:custom_data, {})
+        :"custom-data" => options.fetch(:custom_data, {}),
+        :causes => causes,
       }
       result[:url] = options[:url] if options.key?(:url)
       result[:location] = options[:location] if options.key?(:location)

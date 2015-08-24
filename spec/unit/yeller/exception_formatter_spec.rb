@@ -53,6 +53,23 @@ describe Yeller::ExceptionFormatter do
     end
   end
 
+  if RuntimeError.new.respond_to?(:cause)
+    it "unwraps nested exceptions into causes" do
+      error = nil
+      begin
+        begin
+          raise Foo::CustomException.new("custom")
+        rescue => e
+          raise RuntimeError.new(e)
+        end
+      rescue => e
+        error = e
+      end
+      hash = Yeller::ExceptionFormatter.format(error)
+      hash.fetch(:causes).fetch(0).fetch(:type).should == 'RuntimeError'
+    end
+  end
+
   describe "backtraces" do
     it "formats backtraces" do
       backtrace = [
