@@ -1,5 +1,4 @@
 require 'net/http'
-require 'yajl/json_gem'
 
 require File.expand_path('../yeller/backtrace_filter', __FILE__)
 require File.expand_path('../yeller/client', __FILE__)
