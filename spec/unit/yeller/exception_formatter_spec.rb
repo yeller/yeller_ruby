@@ -68,6 +68,19 @@ describe Yeller::ExceptionFormatter do
       hash = Yeller::ExceptionFormatter.format(error)
       hash.fetch(:causes).fetch(0).fetch(:type).should == 'RuntimeError'
     end
+
+    it "handles recursive causes" do
+      error = nil
+      begin
+        e = RuntimeError.new
+        e.stub(:cause).and_return(e)
+        raise e
+      rescue => e
+        error = e
+      end
+      hash = Yeller::ExceptionFormatter.format(error)
+      hash.fetch(:type).should == 'RuntimeError'
+    end
   end
 
   describe "backtraces" do

@@ -1,3 +1,4 @@
+require 'set'
 module Yeller
   class ExceptionFormatter
     BACKTRACE_FORMAT = %r{^((?:[a-zA-Z]:)?[^:]+):(\d+)(?::in `([^']+)')?$}.freeze
@@ -16,16 +17,22 @@ module Yeller
     end
 
     def self.process_causes(exception)
-      unwrap_causes(exception, [])
+      unwrap_causes(exception)
     end
 
-    def self.unwrap_causes(exception, causes)
-      causes << exception
-      if exception.respond_to?(:cause) && exception.cause
-        unwrap_causes(exception.cause, causes)
-      else
-        causes.reverse
+    def self.unwrap_causes(exception)
+      causes = [exception]
+      previously_seen = Set.new([exception.object_id])
+      while exception.respond_to?(:cause) && exception.cause
+        cause = exception.cause
+        if previously_seen.include?(cause.object_id)
+          break
+        end
+        causes << cause
+        previously_seen << cause.object_id
+        exception = cause
       end
+      causes.reverse!
     end
 
     attr_reader :type, :options, :backtrace_filter
